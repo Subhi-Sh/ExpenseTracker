@@ -1,0 +1,6 @@
+# Ignore .env file
+.env
+
+# Ignore Tailwind CSS files
+node_modules/
+dist/
