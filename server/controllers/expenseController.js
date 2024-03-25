@@ -3,8 +3,8 @@ const Expense = require("../model/Expneses");
 const getAllExpenses = async (req, res) => {
   try {
     const expenses = await Expense.find({});
-    if(!expenses){
-      res.status(404).json({message:'No Expenses Found'})
+    if (!expenses) {
+      res.status(404).json({ message: "No Expenses Found" });
     }
     res.status(200).json(expenses);
   } catch (error) {
@@ -21,34 +21,31 @@ const addExpense = async (req, res) => {
   }
 };
 
-
-const deleteExpense = async (req,res) => {
-  try{
-    const {id} = req.params;
+const deleteExpense = async (req, res) => {
+  try {
+    const { id } = req.params;
     const expense = await Expense.findByIdAndDelete(id);
-    if(!expense){
-      return res.status(404).json({message:"Expense not found"});
+    if (!expense) {
+      return res.status(404).json({ message: "Expense not found" });
     }
-    return res.status(200).json({message:'Expense deleted successfully'});
-  }
-  catch(error){
+    return res.status(200).json({ message: "Expense deleted successfully" });
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
 
-const getExpense = async (req,res) => {
-  try{
-    const {id} = req.params;
+const getExpense = async (req, res) => {
+  try {
+    const { id } = req.params;
     const expense = await Expense.findById(id);
-    if(!expense){
-      return res.status(404).json({message:"Expense not found"});
+    if (!expense) {
+      return res.status(404).json({ message: "Expense not found" });
     }
     return res.status(200).json(expense);
-  }
-  catch(error){
+  } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
 const getLastExpenses = async (req, res) => {
   try {
     const { amount } = req.params;
@@ -66,9 +63,40 @@ const getLastExpenses = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-
-
+const getExpensesCountPerCategory = async (req,res) => {
+  try {
+    const result = await Expense.aggregate([
+      {
+        $lookup: {
+          from: "categories",
+          localField: "categoryid",
+          foreignField: "_id",
+          as: "cat"
+        }
+      },
+      {
+        $unwind: "$cat"
+      },
+      {
+        $group: {
+          _id: "$category_id",
+          category_type: { $first: "$cat.type" },
+          count: { $sum: 1 }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          category_type: 1,
+          count: 1
+        }
+      }
+    ]);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({message:err.message});
+  }
+};
 
 
 module.exports = {
@@ -77,4 +105,5 @@ module.exports = {
   deleteExpense,
   addExpense,
   getLastExpenses,
+  getExpensesCountPerCategory,
 };

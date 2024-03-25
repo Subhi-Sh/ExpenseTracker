@@ -12,7 +12,8 @@ import Expenses from "./components/Expenses"
 import UserProfile from "./components/UserProfile"
 import AddCategory from "./components/AddCategory";
 import NotFound from "./components/NotFound";
-
+import { GlobalProvider } from './contexts/GlobalContext';
+import NavBar from "./components/NavBar";
 // our router for navigating between pages.
 const router = createBrowserRouter([
   {
@@ -49,6 +50,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-      <RouterProvider router={router}/>
+      <GlobalProvider>
+        <RouterProvider router={router}/>
+      </GlobalProvider>
   </React.StrictMode>
 );

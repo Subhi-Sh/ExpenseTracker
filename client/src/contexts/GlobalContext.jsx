@@ -1,7 +1,8 @@
 import React, { useContext, useState,useMemo} from "react"
 import axios from "axios";
 
-const BASE_URL = "http://localhost:3000/notes/";
+const BASE_URL_EXPENSES = "http://localhost:3001/expenses/";
+const BASE_URL_CATEGORIES = "http://localhost:3001/categories/";
 
 
 const GlobalContext = React.createContext()
@@ -9,51 +10,68 @@ const GlobalContext = React.createContext()
 
 export const GlobalProvider = ({children}) => {
 
-    const [notes, setNotes] = useState([])
-    const [error, setError] = useState(null)
+    const [expenses,setExpenses] = useState([]);
+    const [categories,setCategories] = useState([]);
+    const [expensesPerCategory,setExpensesPerCategory] = useState([]);
+    const [lastExpenses,setLastExpenses] = useState([]);
+    const [lastExpensesAmount,setLastExpensesAmount] = useState(5);
 
-  
     
-    const createNote = async (content) => {
-        const response = await axios.post(`${BASE_URL}`, content)
-            .catch((err) =>{
-                setError(err.response.data.message)
-            })
-        getNotes()
+    const getAllExpenses = async () => {
+        try{
+            const response = await axios.get(BASE_URL_EXPENSES)
+            setExpenses(response.data);
+        }
+        catch(error){
+            console.log(error.message);
+        }
     }
 
-    const getNotes = async () => {
-        const response = await axios.get(`${BASE_URL}`)
-        setNotes(response.data)
-        console.log(response.data)
+    const getAllCategories = async () => {
+        try{
+            const response = await  axios.get(BASE_URL_CATEGORIES)
+            setCategories(response.data);
+        }
+        catch(error){
+            console.log(error.message);
+        }
+    }
+    const getExpensesPerCategory = async () => {
+        try{
+            const response = await  axios.get(`${BASE_URL_CATEGORIES}counter-per-category`)
+            setExpensesPerCategory(response.data);
+        }
+        catch(error){
+            console.log(error.message);
+        }
     }
 
-    const deleteNote = async (id) => {
-        await axios.delete(`${BASE_URL}${id}`)
-        getNotes()
-    }
-    const updateNote = async (id,content) => {
-        const updatedNote = await axios.put(`${BASE_URL}${id}`,content)
-        console.log(updatedNote);
-        getNotes()
+    const getLastAmountExpenses = async  () => {
+        try{
+            const response =  await axios.get(`${BASE_URL_EXPENSES}/last/${lastExpensesAmount}`)
+            setLastExpenses(response.data);
+        }
+        catch(error){
+            console.log(error);
+        }
     }
 
     useMemo(() => {
-        getNotes()
-        console.log(notes);
-    }, [])
-
+        getAllExpenses();
+        getAllCategories();
+        getExpensesPerCategory();
+        getLastAmountExpenses();
+    },[])
     
     return (
         <GlobalContext.Provider value={{
-            getNotes,
-            createNote,
-            deleteNote,
-            updateNote,
-            notes,
-            setNotes,
-            setError,
-            error
+            getAllCategories,
+            getAllExpenses,
+            categories,
+            expenses,
+            expensesPerCategory,
+            lastExpenses,
+            setLastExpensesAmount
         }}>
             {children}
         </GlobalContext.Provider>
