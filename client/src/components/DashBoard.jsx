@@ -1,19 +1,20 @@
 import React from "react";
 import ExpensesHistory from "./ExpensesHistory";
-import ExpensePerCategoryDonut from "./ExpensePerCategoryDonut"
+import CategoriesPieChart from "./CategoriesPieChart";
+
 export default function DashBoard() {
+
   return (
-    <div className="flex flex-col items-center w-4/5 min-h-screen border-2 border-red-500">
-      <h1 className="text-6xl mt-10">Dashboard</h1>
+    <div className="flex flex-col items-center  rounded-md w-full">
+      <h1 className="text-6xl text-[#EEEEEE] mb-20 mt-10">Dashboard</h1>
 
-      <div className="border-2 border-blue-500 w-full">
-        <article className="border-2 p-4 border-black">
-          <input type="select" />
-          <ExpensesHistory />
-          <ExpensePerCategoryDonut/>
+      <div className="flex justify-between items-center  w-full">
+        <article className="flex-1 flex items-center justify-center  p-2">
+          <CategoriesPieChart/>
         </article>
-
-
+        <article className="flex-1 flex items-center justify-center  p-2">
+          <ExpensesHistory />
+        </article>
       </div>
     </div>
   );

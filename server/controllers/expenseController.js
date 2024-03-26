@@ -13,6 +13,7 @@ const getAllExpenses = async (req, res) => {
 };
 
 const addExpense = async (req, res) => {
+  console.log(req.body);
   try {
     const expense = await Expense.create(req.body);
     res.status(200).json(expense);
@@ -79,16 +80,18 @@ const getExpensesCountPerCategory = async (req,res) => {
       },
       {
         $group: {
-          _id: "$category_id",
+          _id: "$categoryid",
           category_type: { $first: "$cat.type" },
-          count: { $sum: 1 }
+          count: { $sum: 1 },
+          color:{$first : "$cat.color"}
         }
       },
       {
         $project: {
           _id: 0,
           category_type: 1,
-          count: 1
+          count: 1,
+          color :1
         }
       }
     ]);

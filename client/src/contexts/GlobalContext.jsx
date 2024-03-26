@@ -14,7 +14,7 @@ export const GlobalProvider = ({children}) => {
     const [categories,setCategories] = useState([]);
     const [expensesPerCategory,setExpensesPerCategory] = useState([]);
     const [lastExpenses,setLastExpenses] = useState([]);
-    const [lastExpensesAmount,setLastExpensesAmount] = useState(5);
+    const [lastExpensesAmount,setLastExpensesAmount] = useState(3);
 
     
     const getAllExpenses = async () => {
@@ -38,7 +38,7 @@ export const GlobalProvider = ({children}) => {
     }
     const getExpensesPerCategory = async () => {
         try{
-            const response = await  axios.get(`${BASE_URL_CATEGORIES}counter-per-category`)
+            const response = await  axios.get(`${BASE_URL_EXPENSES}counter-per-category`)
             setExpensesPerCategory(response.data);
         }
         catch(error){
@@ -49,10 +49,31 @@ export const GlobalProvider = ({children}) => {
     const getLastAmountExpenses = async  () => {
         try{
             const response =  await axios.get(`${BASE_URL_EXPENSES}/last/${lastExpensesAmount}`)
+            console.log(response.data);
             setLastExpenses(response.data);
         }
         catch(error){
             console.log(error);
+        }
+    }
+
+    const addExpense = async (expense) => {
+        try{
+            const response = await axios.post(BASE_URL_EXPENSES,expense);
+            console.log(response.data);
+            getAllExpenses();
+        }
+        catch(error){
+            console.log(error.message);
+        }
+    }
+    const deleteExpense = async (expenseId) => {
+        try{
+            const response = await axios.delete(`${BASE_URL_EXPENSES}/${expenseId}`);
+            getAllExpenses();
+        }
+        catch(error){
+            console.log(error.message);
         }
     }
 
@@ -71,7 +92,9 @@ export const GlobalProvider = ({children}) => {
             expenses,
             expensesPerCategory,
             lastExpenses,
-            setLastExpensesAmount
+            setLastExpensesAmount,
+            addExpense,
+            deleteExpense
         }}>
             {children}
         </GlobalContext.Provider>
