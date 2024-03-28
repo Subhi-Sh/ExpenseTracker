@@ -15,8 +15,10 @@ export const GlobalProvider = ({children}) => {
     const [expensesPerCategory,setExpensesPerCategory] = useState([]);
     const [lastExpenses,setLastExpenses] = useState([]);
     const [lastExpensesAmount,setLastExpensesAmount] = useState(3);
+    const currentYear = new Date().getFullYear();
+    const [expensesYear, setExpensesYear] = useState(currentYear);
+    const [expensesTotalForMonthes,setExpensesTotalForMonths] = useState([]);
 
-    
     const getAllExpenses = async () => {
         try{
             const response = await axios.get(BASE_URL_EXPENSES)
@@ -69,8 +71,21 @@ export const GlobalProvider = ({children}) => {
     }
     const deleteExpense = async (expenseId) => {
         try{
-            const response = await axios.delete(`${BASE_URL_EXPENSES}/${expenseId}`);
+            await axios.delete(`${BASE_URL_EXPENSES}/${expenseId}`);
             getAllExpenses();
+        }
+        catch(error){
+            console.log(error.message);
+        }
+    }
+
+    const getSumExpensesPerMonthForYear = async() => {
+        console.log("expenses year = ", expensesYear);
+        try{
+            const response = await axios.post(`${BASE_URL_EXPENSES}sum-expenses-per-month`,{year:expensesYear});
+            console.log(`${BASE_URL_EXPENSES}sum-expenses-per-month`);
+            console.log("expensesTotals", response.data);
+            setExpensesTotalForMonths(response.data);
         }
         catch(error){
             console.log(error.message);
@@ -83,6 +98,12 @@ export const GlobalProvider = ({children}) => {
         getExpensesPerCategory();
         getLastAmountExpenses();
     },[])
+
+    useMemo(() => {
+        if(expensesYear){
+            getSumExpensesPerMonthForYear(expensesYear);
+        }
+    },[expensesYear])
     
     return (
         <GlobalContext.Provider value={{
@@ -94,7 +115,10 @@ export const GlobalProvider = ({children}) => {
             lastExpenses,
             setLastExpensesAmount,
             addExpense,
-            deleteExpense
+            deleteExpense,
+            expensesYear,
+            setExpensesYear,
+            expensesTotalForMonthes
         }}>
             {children}
         </GlobalContext.Provider>

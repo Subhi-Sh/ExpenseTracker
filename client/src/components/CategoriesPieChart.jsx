@@ -5,7 +5,7 @@ import { useGlobalContext } from "../contexts/GlobalContext";
 export default function CategoriesPieChart() {
   const chartRef = useRef(null);
   const chartInstance = useRef(null);
-  const { expensesPerCategory,expenses} = useGlobalContext();
+  const { expensesPerCategory, expenses } = useGlobalContext();
 
   useEffect(() => {
     if (chartInstance.current) {
@@ -26,7 +26,7 @@ export default function CategoriesPieChart() {
             }),
             backgroundColor: expensesPerCategory.map((data) => {
               return data.color;
-            })
+            }),
           },
         ],
       },
@@ -39,8 +39,13 @@ export default function CategoriesPieChart() {
   }, [expensesPerCategory]);
 
   return (
-    <div className="border-2 w-2/5 bg-[#EEEEEE] rounded-md">
-      <canvas ref={chartRef} style={{ width: "300px", height: "200px", padding: "2rem" }} />
-    </div>
+
+      <div className="border-2 w-full h-full bg-[#EEEEEE] rounded-3xl">
+        <canvas
+          ref={chartRef}
+          style={{ width: "400px", height: "300px", padding: "2rem" }}
+        />
+      </div>
+
   );
 }

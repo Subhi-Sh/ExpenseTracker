@@ -5,7 +5,7 @@ export default function ExpensesHistory() {
   const { lastExpenses} = useGlobalContext();
 
   return (
-    <div className="w-1/2 flex-col bg-[#EEEEEE] rounded-md p-4 flex items-center justify-center">
+    <div className="w-full flex-col bg-[#EEEEEE] rounded-3xl p-4 flex items-center justify-center">
         <h1 className="text-4xl mt-4 text-[#31363F] mb-4">Latest Expenses</h1>
         <Link className="font-bold text-lg text-[#8AA6A3] hover:bg-[#31363F] p-2 rounded-md" to="/expenses">View all</Link>
         <div className="w-full flex-col flex items-center justify-center">

@@ -64,7 +64,7 @@ const getLastExpenses = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-const getExpensesCountPerCategory = async (req,res) => {
+const getExpensesCountPerCategory = async (req, res) => {
   try {
     const result = await Expense.aggregate([
       {
@@ -72,35 +72,82 @@ const getExpensesCountPerCategory = async (req,res) => {
           from: "categories",
           localField: "categoryid",
           foreignField: "_id",
-          as: "cat"
-        }
+          as: "cat",
+        },
       },
       {
-        $unwind: "$cat"
+        $unwind: "$cat",
       },
       {
         $group: {
           _id: "$categoryid",
           category_type: { $first: "$cat.type" },
           count: { $sum: 1 },
-          color:{$first : "$cat.color"}
-        }
+          color: { $first: "$cat.color" },
+        },
       },
       {
         $project: {
           _id: 0,
           category_type: 1,
           count: 1,
-          color :1
+          color: 1,
+        },
+      },
+    ]);
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// query to find the sum of expenses for each month of the given year.
+const sumExpensesPerMonthForSelectedYear = async (req, res) => {
+  const { year } = req.body;
+  try {
+    const result = await Expense.aggregate([
+      {
+        // Find all documents that match the given year.
+        $match: {
+          date: {
+            $gte: new Date(`${year}-01-01`),
+            $lt: new Date(`${parseInt(year)+1}-01-01`),
+          },
+        },
+      },
+      // extract the month of each document's date and put it in the month key, and include the amount of spendings.
+      {
+        $project: {
+          month: { $month: "$date" },
+          amount: 1,
+        },
+      },
+      // group the documents by the month and sum each document's expense amount
+      {
+        $group: {
+          _id: "$month",
+          expensesForMonth: { $sum: "$amount" },
+        },
+      },
+      // project the documents by renaming the month's key to monthNumber and include the expensesForMonth 
+      {
+        $project: {
+          _id: 0,
+          monthNumber: "$_id",
+          expensesForMonth: 1,
+        },
+      },
+      {
+        $sort:{
+          monthNumber:1
         }
       }
     ]);
     res.status(200).json(result);
-  } catch (err) {
-    res.status(500).json({message:err.message});
+  } catch (error) {
+    res.status(500).json({message:error.message});
   }
 };
-
 
 module.exports = {
   getExpense,
@@ -109,4 +156,5 @@ module.exports = {
   addExpense,
   getLastExpenses,
   getExpensesCountPerCategory,
+  sumExpensesPerMonthForSelectedYear,
 };

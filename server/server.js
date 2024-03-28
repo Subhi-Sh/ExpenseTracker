@@ -1,6 +1,9 @@
 const express = require("express");
+// routes.
 const ExpenseRoutes = require("./routes/ExpenseRoutes.js");
 const CategoryRoutes = require("./routes/CategoryRoutes.js");
+const IncomeRoutes = require("./routes/IncomeRoutes.js");
+
 const cors = require('cors');
 const app = express();
 const {connection} = require('./db/connection.js');
@@ -23,6 +26,7 @@ app.use(cors(corsOptions));
 // routes
 app.use("/expenses", ExpenseRoutes);
 app.use("/categories", CategoryRoutes);
+app.use("/incomes", IncomeRoutes);
 
 
 const server = () => {
