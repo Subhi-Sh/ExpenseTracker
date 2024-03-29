@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import ExpensesHistory from "./ExpensesHistory";
+import LastTransactions from "./LastTransactions";
 import CategoriesPieChart from "./CategoriesPieChart";
 import ExpensesPerTimeBar from "./ExpensesPerTimeBar";
 import Select from "react-select";
 import { useGlobalContext } from "../contexts/GlobalContext";
-
+import DataBox from "./DataBox";
 export default function DashBoard() {
   const currentYear = new Date().getFullYear();
-  const { expensesYear, setExpensesYear } = useGlobalContext();
+  const { expenses, incomes, expensesYear, setExpensesYear } =
+    useGlobalContext();
   const [selectedYear, setSelectedYear] = useState(expensesYear);
 
   const handleYearChange = (selectedOption) => {
@@ -21,8 +22,15 @@ export default function DashBoard() {
   ).map((year) => ({ value: year, label: year }));
 
   return (
-    <div className="w-full  p-2 items-center flex h-full flex-col">
+    <div className="w-5/6 font-raleway p-2 items-center flex h-full flex-col">
       <h1 className="text-6xl text-[#EEEEEE] mb-10">Dashboard</h1>
+
+      <div className="flex  p-2 items-center flex-wrap w-full justify-between ">
+        <DataBox label={"Expenses"} />
+        <DataBox label={"Balance"} />
+        <DataBox label={"Incomes"} />
+      </div>
+
       <div className="flex  p-2 h-full  flex-col items-center justify-between  rounded-md w-full">
         {/* expense bar section */}
         <section className="w-full h-full rounded-3xl  bg-[#EEEEEE] p-2">
@@ -38,13 +46,19 @@ export default function DashBoard() {
           <ExpensesPerTimeBar />
         </section>
 
-        <div className="flex mt-10 justify-between items-center  w-full">
+        <div className="flex mt-4   justify-between   w-full">
           <article className="flex-1 flex items-center h-full w-full  justify-center  p-2">
-            <CategoriesPieChart />
+            {expenses.length === 0 && incomes.length === 0 ? (
+              <div className="flex items-center justify-center border-2 w-full h-full bg-[#EEEEEE] rounded-3xl">
+                <h2 className="text-2xl">No expenses/incomes per categories avaliable</h2>
+              </div>
+            ) : (
+              <CategoriesPieChart />
+            )}
           </article>
 
           <article className="flex-1 w-full h-full  flex items-center justify-center  p-2">
-            <ExpensesHistory />
+            <LastTransactions numberOfTransactions={3} />
           </article>
         </div>
       </div>

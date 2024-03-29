@@ -2,7 +2,9 @@ import React, { useContext, useState,useMemo} from "react"
 import axios from "axios";
 
 const BASE_URL_EXPENSES = "http://localhost:3001/expenses/";
+const BASE_URL_INCOMES = "http://localhost:3001/incomes/";
 const BASE_URL_CATEGORIES = "http://localhost:3001/categories/";
+const BASE_URL_INCOMES_CATEGORIES = "http://localhost:3001/incomescategories/";
 
 
 const GlobalContext = React.createContext()
@@ -11,13 +13,17 @@ const GlobalContext = React.createContext()
 export const GlobalProvider = ({children}) => {
 
     const [expenses,setExpenses] = useState([]);
+    const [incomes, setIncomes] = useState([]);
     const [categories,setCategories] = useState([]);
+    const [incomeCategories,setIncomeCategories] = useState([]);
+
     const [expensesPerCategory,setExpensesPerCategory] = useState([]);
-    const [lastExpenses,setLastExpenses] = useState([]);
-    const [lastExpensesAmount,setLastExpensesAmount] = useState(3);
+    const [incomesPerCategory,setIncomesPerCategory] = useState([]);
+
     const currentYear = new Date().getFullYear();
     const [expensesYear, setExpensesYear] = useState(currentYear);
     const [expensesTotalForMonthes,setExpensesTotalForMonths] = useState([]);
+    const [incomeTotalForMonthes, setIncomeTotalForMonths] = useState([]);
 
     const getAllExpenses = async () => {
         try{
@@ -48,21 +54,10 @@ export const GlobalProvider = ({children}) => {
         }
     }
 
-    const getLastAmountExpenses = async  () => {
-        try{
-            const response =  await axios.get(`${BASE_URL_EXPENSES}/last/${lastExpensesAmount}`)
-            console.log(response.data);
-            setLastExpenses(response.data);
-        }
-        catch(error){
-            console.log(error);
-        }
-    }
 
     const addExpense = async (expense) => {
         try{
-            const response = await axios.post(BASE_URL_EXPENSES,expense);
-            console.log(response.data);
+            await axios.post(BASE_URL_EXPENSES,expense);
             getAllExpenses();
         }
         catch(error){
@@ -80,11 +75,8 @@ export const GlobalProvider = ({children}) => {
     }
 
     const getSumExpensesPerMonthForYear = async() => {
-        console.log("expenses year = ", expensesYear);
         try{
             const response = await axios.post(`${BASE_URL_EXPENSES}sum-expenses-per-month`,{year:expensesYear});
-            console.log(`${BASE_URL_EXPENSES}sum-expenses-per-month`);
-            console.log("expensesTotals", response.data);
             setExpensesTotalForMonths(response.data);
         }
         catch(error){
@@ -92,16 +84,96 @@ export const GlobalProvider = ({children}) => {
         }
     }
 
+    const getAllIncomes = async () => {
+        try{
+            const result = await axios.get(BASE_URL_INCOMES);
+            setIncomes(result.data);
+        }
+        catch(error){
+            console.log(error.message);
+        }
+    }
+
+    const addIncome = async (income) => {
+        try{
+            await axios.post(BASE_URL_INCOMES, income);
+            getAllIncomes();
+        }
+        catch(error){
+            console.log(error.message);
+        }
+
+    }
+    const deleteIncome = async (incomeId) => {
+        await axios.delete(`${BASE_URL_INCOMES}/${incomeId}`)
+        getAllIncomes();
+    }
+
+    const getIncomesPerCategory = async () => {
+        try
+        {
+            const response = await axios.get(`${BASE_URL_INCOMES}/counter-per-category`)
+            setIncomesPerCategory(response.data);
+        }
+        catch(error)
+        {
+            console.log(error.message);
+        }
+
+    }
+    const getSumIncomesPerMonthForYear = async () => {
+        try{
+            const response = await axios.post(`${BASE_URL_INCOMES}/sum-incomes-per-month`, {year:expensesYear})
+            setIncomeTotalForMonths(response.data);
+        }
+        catch(error){
+            console.log(error.message);
+        }
+    }
+
+    const getAllIncomeCategories = async () => {
+        try{
+            const result = await axios.get(BASE_URL_INCOMES_CATEGORIES);
+            setIncomeCategories(result.data);
+        }
+        catch(error){
+            console.log(error.message);
+        }
+    }
+
+    const addIncomeCategory = async (category) => {
+        try{
+            await axios.post(BASE_URL_INCOMES_CATEGORIES, category)
+            getAllIncomeCategories();
+        }
+        catch(error){
+            console.log(error.message);
+        }
+    }
+    const addExpenseCategory = async (category) => {
+        try{
+            await axios.post(BASE_URL_CATEGORIES, category)
+            getAllCategories();
+        }
+        catch(error){
+            console.log(error.message);
+        }
+    }
+
+
     useMemo(() => {
         getAllExpenses();
         getAllCategories();
         getExpensesPerCategory();
-        getLastAmountExpenses();
+        getAllIncomes();
+        getAllIncomeCategories();
+        getIncomesPerCategory();
     },[])
 
     useMemo(() => {
         if(expensesYear){
             getSumExpensesPerMonthForYear(expensesYear);
+            getSumIncomesPerMonthForYear(expensesYear);
         }
     },[expensesYear])
     
@@ -111,14 +183,20 @@ export const GlobalProvider = ({children}) => {
             getAllExpenses,
             categories,
             expenses,
+            incomes,
+            incomeCategories,
             expensesPerCategory,
-            lastExpenses,
-            setLastExpensesAmount,
             addExpense,
             deleteExpense,
             expensesYear,
             setExpensesYear,
-            expensesTotalForMonthes
+            expensesTotalForMonthes,
+            incomeTotalForMonthes,
+            incomesPerCategory,
+            addIncome,
+            deleteIncome,
+            addIncomeCategory,
+            addExpenseCategory
         }}>
             {children}
         </GlobalContext.Provider>

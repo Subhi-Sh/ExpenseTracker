@@ -17,6 +17,7 @@ const getAllCategories = async(req,res) => {
         if(!categories){
             res.status(404).json({message:'No categories found'});
         }
+        console.log(categories);
         res.status(200).json(categories);
     }
     catch(error){
