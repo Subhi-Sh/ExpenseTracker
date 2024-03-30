@@ -15,6 +15,7 @@ import Expenses from "./components/Expenses";
 import Incomes from "./components/Incomes";
 import Categories from './components/Categories';
 import NotFound from './components/NotFound';
+import Reports from './components/Reports';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +24,7 @@ const router = createBrowserRouter(
       <Route path='expenses' element={<Expenses />} />
       <Route path='incomes' element={<Incomes />} />
       <Route path='categories' element={<Categories />} />
+      <Route path='reports' element={<Reports />} />
     </Route>
   )
 )

@@ -53,8 +53,6 @@ export const GlobalProvider = ({children}) => {
             console.log(error.message);
         }
     }
-
-
     const addExpense = async (expense) => {
         try{
             await axios.post(BASE_URL_EXPENSES,expense);
@@ -160,6 +158,45 @@ export const GlobalProvider = ({children}) => {
         }
     }
 
+    const deleteExpenseCategory = async (categoryId) => {
+        try{
+            await axios.delete(`${BASE_URL_CATEGORIES}${categoryId}`)
+            getAllCategories();
+        }
+        catch(error){
+            console.log(error.message);
+        }
+    }
+    const updateExpenseCategory = async (categoryId,type,color) => {
+        try{
+            await axios.put(`${BASE_URL_CATEGORIES}${categoryId}`, {type:type, color:color})
+            getAllCategories();
+        }
+        catch(error){
+            console.log(error.message);
+        }
+    }
+
+    const deleteIncomeCategory = async (categoryId) => {
+        try{
+            await axios.delete(`${BASE_URL_INCOMES_CATEGORIES}${categoryId}`)
+            getAllIncomeCategories();
+        }
+        catch(error){
+            console.log(error.message);
+        }
+    }
+
+    const updateIncomeCategory = async (categoryId,type,color) => {
+        try{
+            await axios.put(`${BASE_URL_INCOMES_CATEGORIES}${categoryId}`, {type:type, color:color})
+            getAllIncomeCategories();
+        }
+        catch(error){
+            console.log(error.message);
+        }
+    }
+
 
     useMemo(() => {
         getAllExpenses();
@@ -196,7 +233,11 @@ export const GlobalProvider = ({children}) => {
             addIncome,
             deleteIncome,
             addIncomeCategory,
-            addExpenseCategory
+            addExpenseCategory,
+            deleteExpenseCategory,
+            deleteIncomeCategory,
+            updateIncomeCategory,
+            updateExpenseCategory
         }}>
             {children}
         </GlobalContext.Provider>

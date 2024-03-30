@@ -54,11 +54,27 @@ const deleteCategory = async(req,res) => {
         res.status(500).json({message:error.message})
     }
 }
+const updateCategory = async (req, res) => {
+    const { id } = req.params;
+    const { type, color } = req.body;
+
+    try {
+        const updatedCategory = await Category.findByIdAndUpdate(id, { type, color }, { new: true });
+        if (!updatedCategory) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+        res.status(200).json({ message: 'Category updated successfully', category: updatedCategory });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 
 
 module.exports = {
     addCategory,
     deleteCategory,
     getAllCategories,
-    getCategory
+    getCategory,
+    updateCategory
 };
