@@ -16,6 +16,7 @@ import Incomes from "./components/Incomes";
 import Categories from './components/Categories';
 import NotFound from './components/NotFound';
 import Reports from './components/Reports';
+import Settings from "./components/Settings";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,6 +26,8 @@ const router = createBrowserRouter(
       <Route path='incomes' element={<Incomes />} />
       <Route path='categories' element={<Categories />} />
       <Route path='reports' element={<Reports />} />
+      <Route path='settings' element={<Settings />} />
+
     </Route>
   )
 )

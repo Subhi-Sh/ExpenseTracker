@@ -95,7 +95,7 @@ export default function Categories() {
     setExpenseCategoryEditMode({ state: false, index: null });
   }
 
-  function handleUpdateIncomeCategory(id) {
+  function handleUpdateIncomeCategory(id) { 
     if (!updatedIncomeCategoryColor && !updatedIncomeCategoryType) {
       alert("No changes made");
       setIncomeCategoryEditMode({ state: false, index: null });
@@ -125,7 +125,7 @@ export default function Categories() {
         {/* Expense Categories Section */}
         <section className="flex items-center justify-around p-2 h-1/2 w-4/5">
           <article className="bg-[#EEEEEE] rounded-3xl h-full flex items-center justify-start flex-col w-1/2 m-2">
-            <h2>Add Expense Category</h2>
+            <h2 className="mt-4">Add Expense Category</h2>
             <div className="flex  items-center flex-col  h-4/5 w-1/2 mt-4">
               <label className="text-xl text-[#222831] m-2" htmlFor="expense-category-type">
                 Category Type
@@ -134,7 +134,7 @@ export default function Categories() {
                 className="p-2 w-4/5 m-2 mb-8 text-center"
                 type="text"
                 id="expense-category-type"
-                placeholder="Enter category type"
+                placeholder="Enter a category type"
                 onChange={(e) => {
                   setExpenseCategoryType(e.target.value);
                 }}
@@ -159,7 +159,7 @@ export default function Categories() {
           </article>
 
           <article className="h-full bg-[#EEEEEE] rounded-3xl flex items-center justify-start m-2 flex-col w-1/2 ">
-            <h2 className="mb-4">Expense Categories List</h2>
+            <h2 className="mb-4 mt-4">Expense Categories List</h2>
             <ul className="overflow-y-auto p-4  w-4/5 max-h-full">
               {categories.map((category, index) => (
                 <li
@@ -232,7 +232,7 @@ export default function Categories() {
         {/* Income Categories Section */}
         <section className="flex items-center justify-around  p-2 h-1/2 w-4/5">
           <article className="bg-[#EEEEEE] rounded-3xl h-full flex items-center justify-start flex-col w-1/2 m-2 ">
-            <h2>Add Income Category</h2>
+            <h2 className="mt-4">Add Income Category</h2>
             <div className="flex  items-center flex-col  h-4/5 w-1/2 mt-4">
               <label className="text-xl text-[#222831] m-2" htmlFor="income-category-type">
                 Category Type
@@ -241,6 +241,7 @@ export default function Categories() {
                 className="p-2 w-4/5 m-2 mb-8"
                 type="text"
                 id="income-category-type"
+                placeholder="Enter a category type"
                 onChange={(e) => {
                   setIncomeCategoryType(e.target.value);
                 }}
@@ -265,7 +266,7 @@ export default function Categories() {
           </article>
 
           <article className="h-full bg-[#EEEEEE] rounded-3xl flex items-center justify-start m-2 flex-col w-1/2 ">
-            <h2 className="mb-4">Income Categories List</h2>
+            <h2 className="mb-4 mt-4">Income Categories List</h2>
             <ul className="overflow-y-auto p-4  w-4/5 max-h-full">
               {incomeCategories.map((category, index) => (
                 <li

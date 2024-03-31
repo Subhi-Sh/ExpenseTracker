@@ -65,8 +65,8 @@ const getIncomeCountPerCategory = async (req, res) => {
         $group: {
           _id: "$incomeCategories",
           category_type: { $first: "$incomeCategories.type" },
-          count: { $sum: 1 },
           color: { $first: "$incomeCategories.color" },
+          totalAmount: { $sum: "$amount" },
         },
       },
       {
@@ -75,6 +75,7 @@ const getIncomeCountPerCategory = async (req, res) => {
           category_type: 1,
           count: 1,
           color: 1,
+          totalAmount:1,
         },
       },
     ]);

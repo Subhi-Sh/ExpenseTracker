@@ -84,6 +84,7 @@ const getExpensesCountPerCategory = async (req, res) => {
           category_type: { $first: "$cat.type" },
           count: { $sum: 1 },
           color: { $first: "$cat.color" },
+          totalAmount: { $sum: "$amount" }, // Calculate the total amount for each category
         },
       },
       {
@@ -92,6 +93,7 @@ const getExpensesCountPerCategory = async (req, res) => {
           category_type: 1,
           count: 1,
           color: 1,
+          totalAmount: 1, // Include the total amount in the result
         },
       },
     ]);
@@ -100,6 +102,7 @@ const getExpensesCountPerCategory = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
 
 // query to find the sum of expenses for each month of the given year.
 const sumExpensesPerMonthForSelectedYear = async (req, res) => {

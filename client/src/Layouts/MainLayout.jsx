@@ -17,7 +17,7 @@ export default function RootLayout() {
           <img width={500} src={Logo} alt="Logo" />
         </figure>
       </header>
-      <main className=" bg-[#8AA6A3] flex  justify-center shadow-lg p-4 rounded-3xl m-2 w-4/5">
+      <main className=" bg-[#8AA6A3] flex  justify-center shadow-lg p-4 rounded-3xl m-2 w-5/6">
         <Outlet />
       </main>
     </div>

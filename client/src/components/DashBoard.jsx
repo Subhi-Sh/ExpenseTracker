@@ -46,7 +46,7 @@ export default function DashBoard() {
           <ExpensesPerTimeBar />
         </section>
 
-        <div className="flex mt-4   justify-between   w-full">
+        <div className="flex mt-4   justify-between h-1/2   w-full">
           <article className="flex-1 flex items-center h-full w-full  justify-center  p-2">
             {expenses.length === 0 && incomes.length === 0 ? (
               <div className="flex items-center justify-center border-2 w-full h-full bg-[#EEEEEE] rounded-3xl">

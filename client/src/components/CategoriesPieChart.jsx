@@ -24,7 +24,7 @@ export default function CategoriesPieChart() {
         datasets: [
           {
             data: expensesPerCategory.map((data) => {
-              return data.count;
+              return data.totalAmount;
             }),
             backgroundColor: expensesPerCategory.map((data) => {
               return data.color;
@@ -77,7 +77,7 @@ export default function CategoriesPieChart() {
         datasets: [
           {
             data: incomesPerCategory.map((data) => {
-              return data.count;
+              return data.totalAmount;
             }),
             backgroundColor: incomesPerCategory.map((data) => {
               return data.color;
