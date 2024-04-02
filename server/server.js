@@ -4,6 +4,8 @@ const ExpenseRoutes = require("./routes/ExpenseRoutes.js");
 const CategoryRoutes = require("./routes/CategoryRoutes.js");
 const IncomeRoutes = require("./routes/IncomeRoutes.js");
 const IncomesCategoriesRoutes = require("./routes/IncomeCategoryRoutes.js");
+const ReportsRoutes = require("./routes/ReportsRoutes.js");
+
 const cors = require('cors');
 const app = express();
 const {connection} = require('./db/connection.js');
@@ -28,6 +30,7 @@ app.use("/expenses", ExpenseRoutes);
 app.use("/categories", CategoryRoutes);
 app.use("/incomescategories", IncomesCategoriesRoutes);
 app.use("/incomes", IncomeRoutes);
+app.use("/reports", ReportsRoutes);
 
 
 const server = () => {
@@ -36,6 +39,8 @@ const server = () => {
       console.log('listening to port:', port)
   })
 }
+
+
 
 server()
 
