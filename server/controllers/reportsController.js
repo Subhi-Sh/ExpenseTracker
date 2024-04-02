@@ -1,12 +1,7 @@
 const Expense = require("../model/Expneses");
-const Category = require("../model/Categories");
 const Incomes = require("../model/Incomes");
-const IncomeCategory = require("../model/IncomeCategories");
 
-const totalExpenseAndIncomeForMonth = async () => {
-  // get the current month and year.
-  const month = new Date().getMonth();
-  const year = new Date().getFullYear();
+const totalExpenseAndIncomeForMonth = async (year,month) => {
 
   const expensesForMonth = await Expense.aggregate([
     {
@@ -19,7 +14,7 @@ const totalExpenseAndIncomeForMonth = async () => {
     },
     {
       $group: {
-        _id: "$date",
+        _id: {$month:"$date"},
         total: { $sum: "$amount" },
       },
     },
@@ -35,7 +30,7 @@ const totalExpenseAndIncomeForMonth = async () => {
     },
     {
       $group: {
-        _id: "$date",
+        _id: {$month:"$date"},
         total: { $sum: "$amount" },
       },
     },
@@ -43,10 +38,8 @@ const totalExpenseAndIncomeForMonth = async () => {
   return { totalExpense: expensesForMonth, totalIncome: incomeForMonth };
 };
 
-const biggestIncomeAndExpenseCategories = async () => {
-  // get the current month and year.
-  const month = new Date().getMonth();
-  const year = new Date().getFullYear();
+const biggestIncomeAndExpenseCategories = async (year,month) => {
+
 
   const mostExpensiveCategory = await Expense.aggregate([
     {
@@ -133,12 +126,18 @@ const biggestIncomeAndExpenseCategories = async () => {
 };
 
 // main function that will send all data to the frontend.
-const getMonthlyReport = async () => {
-  // getting total expense and income for the current month.
-  const totalIncomeAndExpenses = await totalExpenseAndIncomeForMonth();
-  const categoryData = await biggestIncomeAndExpenseCategories();
+const getMonthlyReport = async (req,res) => {
+  const {year,month} = req.body;
+  try{
+    // getting total expense and income for the current month.
+    const totalIncomeAndExpenses = await totalExpenseAndIncomeForMonth(year,month);
+    const categoryData = await biggestIncomeAndExpenseCategories(year,month);
+    res.status(200).json({total:totalIncomeAndExpenses,categories:categoryData});
+  }
+  catch(error){
+    res.status(500).json({message:error});
+  }
 
-  console.log(categoryData);
 };
 
 module.exports = {

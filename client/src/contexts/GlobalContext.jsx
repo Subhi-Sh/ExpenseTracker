@@ -5,6 +5,7 @@ const BASE_URL_EXPENSES = "http://localhost:3001/expenses/";
 const BASE_URL_INCOMES = "http://localhost:3001/incomes/";
 const BASE_URL_CATEGORIES = "http://localhost:3001/categories/";
 const BASE_URL_INCOMES_CATEGORIES = "http://localhost:3001/incomescategories/";
+const BASE_URL_REPORTS = "http://localhost:3001/reports/";
 
 
 const GlobalContext = React.createContext()
@@ -191,6 +192,15 @@ export const GlobalProvider = ({children}) => {
         try{
             await axios.put(`${BASE_URL_INCOMES_CATEGORIES}${categoryId}`, {type:type, color:color})
             getAllIncomeCategories();
+        }
+        catch(error){
+            console.log(error.message);
+        }
+    }
+
+    const fetchReport = async (year,month) => {
+        try{
+            await axios.get('BASE_URL_REPORTS'), {year:year, month:month});
         }
         catch(error){
             console.log(error.message);
