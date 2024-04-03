@@ -7,7 +7,7 @@ import { useGlobalContext } from "../contexts/GlobalContext";
 import DataBox from "./DataBox";
 export default function DashBoard() {
   const currentYear = new Date().getFullYear();
-  const { expenses, incomes, expensesYear, setExpensesYear } =
+  const {expenses, incomes, expensesYear, setExpensesYear,selectedCurrency} =
     useGlobalContext();
   const [selectedYear, setSelectedYear] = useState(expensesYear);
 
@@ -26,9 +26,9 @@ export default function DashBoard() {
       <h1 className="text-6xl text-[#EEEEEE] mb-10">Dashboard</h1>
 
       <div className="flex  p-2 items-center flex-wrap w-full justify-between ">
-        <DataBox label={"Expenses"} />
-        <DataBox label={"Balance"} />
-        <DataBox label={"Incomes"} />
+        <DataBox label={"Expenses"} selectedCurrency={selectedCurrency} />
+        <DataBox label={"Balance"}  selectedCurrency={selectedCurrency}/>
+        <DataBox label={"Incomes"} selectedCurrency={selectedCurrency}/>
       </div>
 
       <div className="flex  p-2 h-full  flex-col items-center justify-between  rounded-md w-full">
@@ -58,7 +58,7 @@ export default function DashBoard() {
           </article>
 
           <article className="flex-1 w-full h-full  flex items-center justify-center  p-2">
-            <LastTransactions numberOfTransactions={3} />
+            <LastTransactions numberOfTransactions={3} selectedCurrency={selectedCurrency} />
           </article>
         </div>
       </div>

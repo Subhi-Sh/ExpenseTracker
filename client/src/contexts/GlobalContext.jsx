@@ -6,6 +6,7 @@ const BASE_URL_INCOMES = "http://localhost:3001/incomes/";
 const BASE_URL_CATEGORIES = "http://localhost:3001/categories/";
 const BASE_URL_INCOMES_CATEGORIES = "http://localhost:3001/incomescategories/";
 const BASE_URL_REPORTS = "http://localhost:3001/reports/";
+const BASE_URL_CURRENCIES = "http://localhost:3001/currencies/";
 
 
 const GlobalContext = React.createContext()
@@ -13,11 +14,14 @@ const GlobalContext = React.createContext()
 
 export const GlobalProvider = ({children}) => {
 
+    // normal data states.
     const [expenses,setExpenses] = useState([]);
     const [incomes, setIncomes] = useState([]);
     const [categories,setCategories] = useState([]);
     const [incomeCategories,setIncomeCategories] = useState([]);
-
+    const [currencies,setCurrencies] = useState([]);
+    const [selectedCurrency,setSelectedCurrency] = useState("₪");
+    // statistics states.
     const [expensesPerCategory,setExpensesPerCategory] = useState([]);
     const [incomesPerCategory,setIncomesPerCategory] = useState([]);
 
@@ -213,6 +217,16 @@ export const GlobalProvider = ({children}) => {
         }
 
     }
+
+    const fetchCurrencies = async () => {
+        try{
+            const currencies = await axios.get(BASE_URL_CURRENCIES);
+            setCurrencies(currencies.data);
+        }
+        catch(error){
+            console.log(error.message);
+        }
+    }
     useMemo(() => {
         getAllExpenses();
         getAllCategories();
@@ -221,6 +235,7 @@ export const GlobalProvider = ({children}) => {
         getAllIncomeCategories();
         getIncomesPerCategory();
         fetchReport();
+        fetchCurrencies();
     },[])
 
     useMemo(() => {
@@ -264,6 +279,9 @@ export const GlobalProvider = ({children}) => {
             report,
             setSelectedMonth,
             setSelectedYear,
+            currencies,
+            setSelectedCurrency,
+            selectedCurrency,
             selectedMonth,
             selectedYear
         }}>

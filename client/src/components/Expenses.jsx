@@ -9,11 +9,10 @@ import {
   FaCalendarAlt,
   FaRegComment,
   FaTrash,
-  FaShekelSign,
 } from "react-icons/fa";
 
 export default function Expenses() {
-  const { expenses, categories, addExpense, deleteExpense } =
+  const { expenses, categories, addExpense, deleteExpense,selectedCurrency} =
     useGlobalContext();
   // use states.
   const [selectedExpenseType, setSelectedExpenseType] = useState("");
@@ -150,7 +149,7 @@ export default function Expenses() {
                   <ul className="flex w-full p-2 items-center justify-between">
                     <li className="flex items-center justify-center text-[#EEEEEE] text-lg">
                       <i className="m-2">
-                        <FaShekelSign />
+                        {selectedCurrency}
                       </i>
                       {expense.amount.toLocaleString()}
                     </li>

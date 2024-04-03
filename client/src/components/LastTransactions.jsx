@@ -2,12 +2,11 @@ import React from "react";
 import { useGlobalContext } from "../contexts/GlobalContext";
 import {
   FaCalendarAlt,
-  FaRegComment,
-  FaShekelSign,
+  FaRegComment
 } from "react-icons/fa";
 import moment from "moment";
 
-export default function LastTransactions({ numberOfTransactions }) {
+export default function LastTransactions({ numberOfTransactions, selectedCurrency}) {
   const { expenses, incomes } = useGlobalContext();
 
   // Combine expenses and incomes into a single array
@@ -34,7 +33,7 @@ export default function LastTransactions({ numberOfTransactions }) {
                 <ul className="flex w-full p-2 items-center justify-between">
                   <li className="flex items-center justify-center text-[#EEEEEE] text-lg">
                     <i className="m-2">
-                      <FaShekelSign />
+                      {selectedCurrency}
                     </i>
                     {transaction.amount.toLocaleString()}
                   </li>

@@ -1,10 +1,9 @@
 import React, { useMemo } from "react";
 import { useGlobalContext } from "../contexts/GlobalContext";
-import {FaShekelSign} from "react-icons/fa";
 
-export default function DataBox({ label }) {
+export default function DataBox({ label,selectedCurrency}) {
   const { expenses, incomes } = useGlobalContext();
-
+  console.log(selectedCurrency);
   const dataToShow = useMemo(() => {
     const totalExpenses = expenses.reduce((acc, expense) => acc + expense.amount, 0);
     const totalIncome = incomes.reduce((acc, income) => acc + income.amount, 0);
@@ -23,7 +22,7 @@ export default function DataBox({ label }) {
   return (
     <div className="flex flex-col items-center justify-center bg-gray-200 p-2 w-1/4 rounded-3xl">
       <h3>{label}</h3>
-      <p className={`flex items-center text-xl font-bold ${dataToShow.colorClass}`}>{dataToShow.sign}<FaShekelSign/>{dataToShow.value.toLocaleString()}</p>
+      <p className={`flex items-center text-xl font-bold ${dataToShow.colorClass}`}>{dataToShow.sign}{selectedCurrency}{dataToShow.value.toLocaleString()}</p>
     </div>
   );
 }

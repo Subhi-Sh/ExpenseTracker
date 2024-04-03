@@ -13,7 +13,7 @@ import {
 } from "react-icons/fa";
 
 export default function Incomes() {
-  const { incomes, incomeCategories, addIncome, deleteIncome } =
+  const { incomes, incomeCategories, addIncome, deleteIncome,selectedCurrency} =
     useGlobalContext();
     console.log(incomeCategories);
   // use states.
@@ -145,7 +145,7 @@ export default function Incomes() {
                   <ul className="flex w-full p-2 items-center justify-between">
                     <li className="flex items-center justify-center text-[#EEEEEE] text-lg">
                       <i className="m-2">
-                        <FaShekelSign />
+                        {selectedCurrency}
                       </i>
                       {income.amount.toLocaleString()}
                     </li>

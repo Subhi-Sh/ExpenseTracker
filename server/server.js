@@ -5,7 +5,7 @@ const CategoryRoutes = require("./routes/CategoryRoutes.js");
 const IncomeRoutes = require("./routes/IncomeRoutes.js");
 const IncomesCategoriesRoutes = require("./routes/IncomeCategoryRoutes.js");
 const ReportsRoutes = require("./routes/ReportsRoutes.js");
-
+const CurrenciesRoutes = require('./routes/CurrenciesRoutes.js');
 const cors = require('cors');
 const app = express();
 const {connection} = require('./db/connection.js');
@@ -26,11 +26,13 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // routes
+app.use("/currencies",CurrenciesRoutes);
 app.use("/expenses", ExpenseRoutes);
 app.use("/categories", CategoryRoutes);
 app.use("/incomescategories", IncomesCategoriesRoutes);
 app.use("/incomes", IncomeRoutes);
 app.use("/reports", ReportsRoutes);
+
 
 
 const server = () => {
