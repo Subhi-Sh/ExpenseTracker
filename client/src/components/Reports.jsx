@@ -1,13 +1,10 @@
 import React, { useMemo, useState } from "react";
 import Select from "react-select";
+import { useGlobalContext } from "../contexts/GlobalContext";
 
 export default function Reports() {
-  const [selectedMonth, setSelectedMonth] = useState(1);
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const { report, setSelectedYear, setSelectedMonth, selectedYear, selectedMonth } = useGlobalContext();
 
-  useMemo(() => {
-    console.log(selectedYear,selectedMonth);
-  },[selectedMonth,selectedYear])
 
   const months = [
     { label: "January", value: 1 },
@@ -31,32 +28,42 @@ export default function Reports() {
   }
 
   const handleChange = (selectedOption) => {
-    console.log(selectedOption.value);
     setSelectedMonth(selectedOption.value);
   };
   const handleYearChange = (selectedOption) => {
     setSelectedYear(selectedOption.value);
   };
-  
+
 
   return (
-    <div className="flex flex-col p-2 justify-start items-center  border-2 border-blue-500 w-full">
+    <div className="flex flex-col p-2 justify-start items-center w-full">
       <h1 className="p-2 mb-4">Monthly Reports</h1>
-      <article className="w-full border-2 p-2 border-green-500 justify-center h-full flex">
-        <div className="flex border-2 border-blue-500 items-start p-2 bg-[#EEEEEE] rounded-3xl justify-end w-1/2">
-          <Select
-            className="w-1/4 p-2"
-            value={years.find((year) => year.value === selectedYear)}
-            onChange={handleYearChange}
-            options={years}
-          />
+      <article className="w-full p-2 justify-center h-1/2 flex">
+        <div className="flex  flex-col  items-start p-2 bg-[#EEEEEE] rounded-3xl  w-1/2">
+          <div className="w-full rounded-3xl mb-20 flex  items-center">
+            <Select
+              className="w-1/2  p-2"
+              value={years.find((year) => year.value === selectedYear)}
+              onChange={handleYearChange}
+              options={years}
+            />
 
-          <Select
-            className="w-1/4 p-2"
-            value={months.find((month) => month.value === selectedMonth)}
-            onChange={handleChange}
-            options={months}
-          />
+            <Select
+              className="w-1/2 p-2"
+              value={months.find((month) => month.value === selectedMonth)}
+              onChange={handleChange}
+              options={months}
+            />
+          </div>
+
+          <div className="flex justify-center  w-full  mt-2 rounded-3xl">
+            {report.data.total.totalExpense.length === 0 && report.data.total.totalIncome.length === 0 ? (
+              <h1>No Report avaliable</h1>
+            ) : (
+              <button className="bg-[#222831] text-[#EEEEEE] rounded-3xl font-bold p-4 ">View Report</button>
+            )}
+          </div>
+
         </div>
       </article>
     </div>

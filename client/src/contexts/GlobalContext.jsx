@@ -26,6 +26,11 @@ export const GlobalProvider = ({children}) => {
     const [expensesTotalForMonthes,setExpensesTotalForMonths] = useState([]);
     const [incomeTotalForMonthes, setIncomeTotalForMonths] = useState([]);
 
+    // for reports.
+    const [selectedMonth, setSelectedMonth] = useState(1);
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [report,setReport] = useState([]);
+
     const getAllExpenses = async () => {
         try{
             const response = await axios.get(BASE_URL_EXPENSES)
@@ -198,16 +203,16 @@ export const GlobalProvider = ({children}) => {
         }
     }
 
-    const fetchReport = async (year,month) => {
+    const fetchReport = async () => {
         try{
-            await axios.get('BASE_URL_REPORTS'), {year:year, month:month});
+            const report = await axios.post(BASE_URL_REPORTS, {year:selectedYear, month:selectedMonth});
+            setReport(report);
         }
         catch(error){
             console.log(error.message);
         }
+
     }
-
-
     useMemo(() => {
         getAllExpenses();
         getAllCategories();
@@ -215,6 +220,7 @@ export const GlobalProvider = ({children}) => {
         getAllIncomes();
         getAllIncomeCategories();
         getIncomesPerCategory();
+        fetchReport();
     },[])
 
     useMemo(() => {
@@ -223,6 +229,13 @@ export const GlobalProvider = ({children}) => {
             getSumIncomesPerMonthForYear(expensesYear);
         }
     },[expensesYear])
+
+    useMemo(() => {
+        if(selectedMonth && selectedYear){
+            console.log(selectedMonth, selectedYear);
+            fetchReport();
+        }
+    },[selectedMonth,selectedYear]);
     
     return (
         <GlobalContext.Provider value={{
@@ -247,7 +260,12 @@ export const GlobalProvider = ({children}) => {
             deleteExpenseCategory,
             deleteIncomeCategory,
             updateIncomeCategory,
-            updateExpenseCategory
+            updateExpenseCategory,
+            report,
+            setSelectedMonth,
+            setSelectedYear,
+            selectedMonth,
+            selectedYear
         }}>
             {children}
         </GlobalContext.Provider>

@@ -3,6 +3,6 @@ const router = express.Router();
 const {getMonthlyReport} = require("../controllers/reportsController");
 
 
-router.get('/', getMonthlyReport);
+router.post('/', getMonthlyReport);
 
 module.exports = router;

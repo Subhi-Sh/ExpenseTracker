@@ -128,10 +128,12 @@ const biggestIncomeAndExpenseCategories = async (year,month) => {
 // main function that will send all data to the frontend.
 const getMonthlyReport = async (req,res) => {
   const {year,month} = req.body;
+  console.log(req.body);
   try{
     // getting total expense and income for the current month.
     const totalIncomeAndExpenses = await totalExpenseAndIncomeForMonth(year,month);
     const categoryData = await biggestIncomeAndExpenseCategories(year,month);
+    console.log(totalIncomeAndExpenses, categoryData);
     res.status(200).json({total:totalIncomeAndExpenses,categories:categoryData});
   }
   catch(error){
