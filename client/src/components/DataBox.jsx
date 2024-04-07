@@ -3,15 +3,15 @@ import { useGlobalContext } from "../contexts/GlobalContext";
 
 export default function DataBox({ label,selectedCurrency}) {
   const { expenses, incomes } = useGlobalContext();
-  console.log(selectedCurrency);
+  console.log(expenses,incomes);
   const dataToShow = useMemo(() => {
     const totalExpenses = expenses.reduce((acc, expense) => acc + expense.amount, 0);
     const totalIncome = incomes.reduce((acc, income) => acc + income.amount, 0);
     const balance = parseFloat(totalIncome - totalExpenses);
-
-    if (label === "Expenses") {
+    console.log(totalExpenses,totalIncome);
+    if (label === "Expense") {
       return { value: totalExpenses, colorClass: "text-red-500", sign: "-" };
-    } else if (label === "Incomes") {
+    } else if (label === "Income") {
       return { value: totalIncome, colorClass: "text-green-500", sign: "+" };
     } else {
       const balanceValue = balance >= 0 ? balance : -balance;

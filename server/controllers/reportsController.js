@@ -38,91 +38,69 @@ const totalExpenseAndIncomeForMonth = async (year,month) => {
   return { totalExpense: expensesForMonth, totalIncome: incomeForMonth };
 };
 
-const biggestIncomeAndExpenseCategories = async (year,month) => {
+const expenseAndIncomeByCategories = async (year,month) => {
+  console.log(year,month)
 
-
-  const mostExpensiveCategory = await Expense.aggregate([
+  const totalExpensesByCategory = await Expense.aggregate([
     {
       $match: {
-        date: {
-          $gte: new Date(`${year}-${month}-01`),
-          $lt: new Date(`${year}-${month + 1}-01`),
-        },
-      },
-    },
-    {
-      $group: {
-        _id: "$categoryid",
-        categoryName: { $first: "$categoryid" },
-        totalAmount: { $sum: "$amount" },
-      },
-    },
-    {
-      $sort: {
-        totalAmount: -1,
-      },
-    },
-    {
-      $limit: 1,
+        date:{
+          $gte:new Date(`${year}-${month}-01`),
+          $lt:new Date(`${year}-${month+1}-01`)   
+        }
+      }
     },
     {
       $lookup: {
         from: "categories",
-        localField: "_id",
+        localField: "categoryid",
         foreignField: "_id",
-        as: "categoryDetails",
-      },
+        as: "categoryDetails"
+      }
     },
     {
-      $project: {
-        _id: 0,
-        categoryName: { $arrayElemAt: ["$categoryDetails.type", 0] },
-        totalAmount: 1,
-      },
-    },
-  ]);
-  const bestIncomeCategory = await Incomes.aggregate([
-    {
-      $match: {
-        date: {
-          $gte: new Date(`${year}-${month}-01`),
-          $lt: new Date(`${year}-${month + 1}-01`),
-        },
-      },
+      $unwind: "$categoryDetails"
     },
     {
       $group: {
         _id: "$categoryid",
-        categoryName: { $first: "$categoryid" },
-        totalAmount: { $sum: "$amount" },
-      },
-    },
+        categoryName:{$first:"$categoryDetails.type"},
+        totalAmount:{$sum:"$amount"}
+      }
+    }
+    
+  ]);
+  const totalIncomeByCategory = await Incomes.aggregate([
     {
-      $sort: {
-        totalAmount: -1,
-      },
-    },
-    {
-      $limit: 1,
+      $match: {
+        date:{
+          $gte:new Date(`${year}-${month}-01`),
+          $lt:new Date(`${year}-${month+1}-01`)   
+        }
+      }
     },
     {
       $lookup: {
         from: "incomecategories",
-        localField: "_id",
+        localField: "categoryid",
         foreignField: "_id",
-        as: "categoryDetails",
-      },
+        as: "categoryDetails"
+      }
     },
     {
-      $project: {
-        _id: 0,
-        categoryName: { $arrayElemAt: ["$categoryDetails.type", 0] },
-        totalAmount: 1,
-      },
+      $unwind: "$categoryDetails"
     },
+    {
+      $group: {
+        _id: "$categoryid",
+        categoryName:{$first:"$categoryDetails.type"},
+        totalAmount:{$sum:"$amount"}
+      }
+    }
+    
   ]);
-
-  return {expenseCategory:mostExpensiveCategory, incomeCategory:bestIncomeCategory}
+  
+  return {expenseCategories:totalExpensesByCategory, incomeCategories:totalIncomeByCategory}
 };
 
 // main function that will send all data to the frontend.
@@ -131,8 +109,7 @@ const getMonthlyReport = async (req,res) => {
   try{
     // getting total expense and income for the current month.
     const totalIncomeAndExpenses = await totalExpenseAndIncomeForMonth(year,month);
-    const categoryData = await biggestIncomeAndExpenseCategories(year,month);
-    console.log(totalIncomeAndExpenses, categoryData);
+    const categoryData = await expenseAndIncomeByCategories(year,month);
     res.status(200).json({total:totalIncomeAndExpenses,categories:categoryData});
   }
   catch(error){

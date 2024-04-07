@@ -41,6 +41,11 @@ export default function Incomes() {
     const result = validateExpenseFormat(incomeName, incomeAmount);
     if (result !== null) {
       setErrorMessage(result);
+      return;
+    }
+    if(incomeDate > moment().toDate()){
+      setErrorMessage("Please dont pick a date in the future");
+      return;
     }
     // everything is fine, we add the expense.
     const incomeObject = {
@@ -133,7 +138,7 @@ export default function Incomes() {
       <div className="flex w-2/3  flex-col items-center ">
         <div className=" w-5/6 m-4 ml-4 h-[1200px] flex flex-col items-center bg-[#EEEEEE] rounded-3xl overflow-auto">
           <h2 className="text-5xl p-2 w-5/6 mt-5 text-[#8AA6A3] font-bold">
-            Incomes
+            Income
           </h2>
           {incomes.length === 0 ? (
             <h1 className="text-4xl text-center w-full p-20">No Incomes Yet...</h1>

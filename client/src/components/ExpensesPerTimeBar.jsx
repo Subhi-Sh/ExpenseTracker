@@ -61,7 +61,7 @@ export default function ExpensesPerTimeBar() {
               plugins: {
                 title: {
                   display: true,
-                  text: "Income And Expenses",
+                  text: "Income And Expense",
                   align: "start",
                   font: {
                     size: 25,

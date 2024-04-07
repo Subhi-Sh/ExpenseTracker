@@ -26,9 +26,9 @@ export default function DashBoard() {
       <h1 className="text-6xl text-[#EEEEEE] mb-10">Dashboard</h1>
 
       <div className="flex  p-2 items-center flex-wrap w-full justify-between ">
-        <DataBox label={"Expenses"} selectedCurrency={selectedCurrency} />
+        <DataBox label={"Expense"} selectedCurrency={selectedCurrency} />
         <DataBox label={"Balance"}  selectedCurrency={selectedCurrency}/>
-        <DataBox label={"Incomes"} selectedCurrency={selectedCurrency}/>
+        <DataBox label={"Income"} selectedCurrency={selectedCurrency}/>
       </div>
 
       <div className="flex  p-2 h-full  flex-col items-center justify-between  rounded-md w-full">
@@ -50,7 +50,7 @@ export default function DashBoard() {
           <article className="flex-1 flex items-center h-full w-full  justify-center  p-2">
             {expenses.length === 0 && incomes.length === 0 ? (
               <div className="flex items-center justify-center border-2 w-full h-full bg-[#EEEEEE] rounded-3xl">
-                <h2 className="text-2xl">No expenses/incomes per categories avaliable</h2>
+                <h2 className="text-2xl">No expense/income per categories avaliable</h2>
               </div>
             ) : (
               <CategoriesPieChart />

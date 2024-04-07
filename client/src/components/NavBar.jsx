@@ -23,7 +23,7 @@ export default function NavBar() {
           style={{ textDecoration: "none !important" }}
         >
           <FaMoneyBill className="mr-2" />
-          Expenses
+          Expense
         </Link>
         <Link
           className="flex justify-center items-center w-full text-[#EEEEEE] text-xl rounded-3xl p-2 hover:no-underline hover:text-[#EEEEEE] focus:bg-[#8AA6A3] focus:no-underline focus:text-[#EEEEEE] hover:bg-[#8AA6A3] ml-2"
@@ -31,7 +31,7 @@ export default function NavBar() {
           style={{ textDecoration: "none !important" }}
         >
           <FaMoneyCheckAlt className="mr-2" />
-          Incomes
+          Income
         </Link>
         
         <Link
